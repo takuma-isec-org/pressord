@@ -1,7 +1,7 @@
-from flask import (Flask)
+from flask import (Flask, render_template)
+import pending, member
 
 app = Flask(__name__)
-from . import pending, member
 app.register_blueprint(member.bp)
 app.register_blueprint(pending.bp)
 
