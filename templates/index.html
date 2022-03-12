@@ -60,11 +60,12 @@
         </ul>
     </header>
     <main>
+        {% if loggedIn %}
         <div class="row z-depth-2">
             <form class="col s12">
                 <div class="row no-margin-bottom">
                     <div class="input-field col s12 no-margin-bottom">
-                        <input id="post_title" type="text">
+                        <input id="post_title" type="text" required>
                         <label for="post_title">タイトル</label>
                     </div>
                 </div>
@@ -76,12 +77,11 @@
                         </ul>
                     </div>
                     <div id="post_body_tab" class="col input-field col s12 no-margin-bottom">
-                        <textarea id="post_body" class="materialize-textarea"></textarea>
+                        <textarea id="post_body" class="materialize-textarea" required></textarea>
                         <label for="post_body">本文</label>
                     </div>
                     <div id="post_preview_tab" class="col s12">
-                        <div style="margin: 30px;">
-                            hoge
+                        <div id="post_preview" style="margin: 30px;">
                         </div>
                     </div>
                 </div>
@@ -97,22 +97,43 @@
                   <div class="modal-content">
                     <h4>記事の保存</h4>
                     <p>記事の保存をします</p>
-                  </div>
+                    
+                    <p class="card">
+                      <label>
+                        <input name="release_group" type="radio" />
+                        <span>公開する(審査有)</span>
+                      </label>
+                    </p>
+                    <p class="card">
+                      <label>
+                        <input name="release_group" type="radio" checked />
+                        <span>下書きとして保存する</span>
+                      </label>
+                    </p>
+                </div>
                   <div class="modal-footer">
                     <button type="submit" class="modal-close waves-effect waves-green btn-flat">保存</button>
                   </div>
                 </div>
             </form>
-
-         </div>
+        </div>
+        {% endif %}
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var elems = document.querySelectorAll('.modal');
             var instances = M.Modal.init(elems);
             var elems = document.querySelectorAll('.tabs');
             var instance = M.Tabs.init(elems);
+            // Markdown自動Preview
+            var input_elem = document.getElementById("post_body");
+            var preview_elem = document.getElementById("post_preview");
+            input_elem.addEventListener('input', updateValue);
+            function updateValue(e) {
+                preview_elem.innerHTML = marked.parse(e.target.value);
+            }
         });
     </script>
 </body>
